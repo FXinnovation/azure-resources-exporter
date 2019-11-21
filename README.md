@@ -1,2 +1,2 @@
 # azure-resources-exporter
-Prometheus exporter exposing Azure resources API results as metrics
+Prometheus exporter exposing Azure resources API results as metrics (**WIP**)
