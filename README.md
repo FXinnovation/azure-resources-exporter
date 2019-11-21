@@ -49,10 +49,10 @@ You can build a docker image using:
 ```bash
 make docker
 ```
-The resulting image is named `fxinnovation/azure-resources-exporter:{git-branch}`.
+The resulting image is named `fxinnovation/azure-resources-exporter:<git-branch>`.
 It exposes port 9259 and expects the config in /config.yml. To configure it, you can bind-mount a config from your host: 
 ```
-$ docker run -p 9259 -v /path/on/host/config.yml:/config.yml fxinnovation/azure-resources-exporter:master
+$ docker run -p 9259:9259 -v /path/on/host/config.yml:/opt/azure-resources-exporter/config.yml fxinnovation/azure-resources-exporter:<git-branch>
 ```
 
 ## Contributing
