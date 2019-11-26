@@ -2,12 +2,12 @@ package main
 
 import (
 	"io/ioutil"
-	"log"
 	"net/http"
 	"os"
 
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"github.com/prometheus/common/log"
 	"github.com/prometheus/common/version"
 
 	"gopkg.in/alecthomas/kingpin.v2"
@@ -35,15 +35,15 @@ func main() {
 	kingpin.HelpFlag.Short('h')
 	kingpin.Parse()
 
-	log.Println("Starting exporter", version.Info())
-	log.Println("Build context", version.BuildContext())
+	log.Info("Starting exporter", version.Info())
+	log.Info("Build context", version.BuildContext())
 
 	config = loadConfig(*configFile)
 
-	collector, err := NewVirtualMachinesCollector()
+	collector, err := NewVirtualMachinesCollector(os.Getenv("AZURE_SUBSCRIPTION_ID"))
 
 	if err != nil {
-		log.Fatal("Can't create Virtual Machines Collector", err)
+		log.Fatalf("Can't create Virtual Machines Collector: %s", err)
 	}
 
 	prometheus.MustRegister(collector)
@@ -59,7 +59,7 @@ func main() {
 			</html>`))
 	})
 
-	log.Println("Beginning to serve on address ", *listenAddress)
+	log.Info("Beginning to serve on address ", *listenAddress)
 	log.Fatal(http.ListenAndServe(*listenAddress, nil))
 }
 
@@ -67,7 +67,7 @@ func loadConfig(configFile string) Config {
 	config := Config{}
 
 	if fileExists(configFile) {
-		log.Printf("Loading config file %v", configFile)
+		log.Infof("Loading config file %v", configFile)
 
 		// Load the config from the file
 		configData, err := ioutil.ReadFile(configFile)
@@ -80,7 +80,7 @@ func loadConfig(configFile string) Config {
 			log.Fatalf("Error: %v", errYAML)
 		}
 	} else {
-		log.Printf("Config file %v does not exist, using default values", configFile)
+		log.Infof("Config file %v does not exist, using default values", configFile)
 	}
 
 	return config

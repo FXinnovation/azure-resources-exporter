@@ -1,10 +1,9 @@
 package main
 
 import (
-	"log"
-
 	"github.com/Azure/azure-sdk-for-go/services/compute/mgmt/2019-07-01/compute"
 	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/common/log"
 )
 
 // VirtualMachinesCollector collect Virtual Machines metrics
@@ -13,8 +12,8 @@ type VirtualMachinesCollector struct {
 }
 
 // NewVirtualMachinesCollector returns the collector
-func NewVirtualMachinesCollector() (*VirtualMachinesCollector, error) {
-	virtualMachines, err := NewVirtualMachines()
+func NewVirtualMachinesCollector(subscriptionID string) (*VirtualMachinesCollector, error) {
+	virtualMachines, err := NewVirtualMachines(subscriptionID)
 
 	if err != nil {
 		return nil, err
@@ -36,7 +35,7 @@ func (c *VirtualMachinesCollector) Collect(ch chan<- prometheus.Metric) {
 	vmList, err := c.virtualMachines.GetVirtualMachines()
 
 	if err != nil {
-		log.Print("Failed to get virtual machines list", err)
+		log.Errorf("Failed to get virtual machines list: %v", err)
 		ch <- prometheus.NewInvalidMetric(azureErrorDesc, err)
 		return
 	}
