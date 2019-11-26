@@ -4,6 +4,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
@@ -14,10 +15,11 @@ import (
 )
 
 var (
-	configFile    = kingpin.Flag("config.file", "Exporter configuration file.").Default("config.yml").String()
-	listenAddress = kingpin.Flag("web.listen-address", "The address to listen on for HTTP requests.").Default(":9259").String()
-	metricsPath   = kingpin.Flag("web.telemetry-path", "Path under which to expose metrics.").Default("/metrics").String()
-	config        Config
+	configFile     = kingpin.Flag("config.file", "Exporter configuration file.").Default("config.yml").String()
+	listenAddress  = kingpin.Flag("web.listen-address", "The address to listen on for HTTP requests.").Default(":9259").String()
+	metricsPath    = kingpin.Flag("web.telemetry-path", "Path under which to expose metrics.").Default("/metrics").String()
+	config         Config
+	azureErrorDesc = prometheus.NewDesc("azure_error", "Error collecting metrics", nil, nil)
 )
 
 // Config of the exporter
@@ -38,7 +40,12 @@ func main() {
 
 	config = loadConfig(*configFile)
 
-	collector := NewCollector()
+	collector, err := NewVirtualMachinesCollector()
+
+	if err != nil {
+		log.Fatal("Can't create Virtual Machines Collector", err)
+	}
+
 	prometheus.MustRegister(collector)
 
 	http.Handle(*metricsPath, promhttp.Handler())
@@ -59,16 +66,30 @@ func main() {
 func loadConfig(configFile string) Config {
 	config := Config{}
 
-	// Load the config from the file
-	configData, err := ioutil.ReadFile(configFile)
-	if err != nil {
-		log.Fatalf("Error: %v", err)
-	}
+	if fileExists(configFile) {
+		log.Printf("Loading config file %v", configFile)
 
-	errYAML := yaml.Unmarshal([]byte(configData), &config)
-	if errYAML != nil {
-		log.Fatalf("Error: %v", errYAML)
+		// Load the config from the file
+		configData, err := ioutil.ReadFile(configFile)
+		if err != nil {
+			log.Fatalf("Error: %v", err)
+		}
+
+		errYAML := yaml.Unmarshal([]byte(configData), &config)
+		if errYAML != nil {
+			log.Fatalf("Error: %v", errYAML)
+		}
+	} else {
+		log.Printf("Config file %v does not exist, using default values", configFile)
 	}
 
 	return config
+}
+
+func fileExists(filename string) bool {
+	info, err := os.Stat(filename)
+	if os.IsNotExist(err) {
+		return false
+	}
+	return !info.IsDir()
 }
