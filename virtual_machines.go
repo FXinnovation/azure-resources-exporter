@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"os"
 
 	"github.com/Azure/azure-sdk-for-go/services/compute/mgmt/2019-07-01/compute"
 	"github.com/Azure/go-autorest/autorest"
@@ -29,7 +28,11 @@ type VirtualMachines interface {
 }
 
 // NewVirtualMachines returns a new Virtual Machines client
-func NewVirtualMachines() (VirtualMachines, error) {
+func NewVirtualMachines(subscriptionID string) (VirtualMachines, error) {
+
+	if subscriptionID == "" {
+		return nil, errors.New("Invalid subscription ID")
+	}
 
 	authorizer, err := auth.NewAuthorizerFromEnvironment()
 	if err != nil {
@@ -37,7 +40,7 @@ func NewVirtualMachines() (VirtualMachines, error) {
 	}
 
 	session := AzureSession{
-		SubscriptionID: os.Getenv("AZURE_SUBSCRIPTION_ID"),
+		SubscriptionID: subscriptionID,
 		Authorizer:     authorizer,
 	}
 
