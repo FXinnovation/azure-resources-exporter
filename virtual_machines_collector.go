@@ -51,6 +51,7 @@ func (c *VirtualMachinesCollector) CollectInstanceUp(ch chan<- prometheus.Metric
 		for _, status := range *vm.VirtualMachineProperties.InstanceView.Statuses {
 			if *status.Code == "PowerState/running" {
 				up = 1
+				break
 			}
 		}
 
