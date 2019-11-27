@@ -111,7 +111,7 @@ func TestCollect_Up(t *testing.T) {
 
 	var vmList []compute.VirtualMachine
 	id := "/subscriptions/my_subscription/resourceGroups/my_rg/providers/Microsoft.Compute/virtualMachines/my_vm"
-	runningStatus := "PowerState/running"
+	runningStatus := VirtualMachineUpState
 	otherStatus := "other"
 	vmList = append(vmList, compute.VirtualMachine{
 		VirtualMachineProperties: &compute.VirtualMachineProperties{
