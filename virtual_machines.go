@@ -7,6 +7,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure/auth"
 	"github.com/pkg/errors"
+	"github.com/prometheus/common/log"
 )
 
 // AzureSession is an object representing session for subscription
@@ -68,7 +69,12 @@ func (vmClient *VirtualMachinesClient) GetVirtualMachines() (*[]compute.VirtualM
 		}
 
 		tempVM := it.Value()
-		labels := ParseResourceLabels(*tempVM.ID)
+		labels, err := ParseResourceLabels(*tempVM.ID)
+
+		if err != nil {
+			log.Errorf("Skipping virtual machine: %s", err)
+			continue
+		}
 
 		vm, err := vmClient.Client.Get(context.Background(), labels["resource_group"], labels["resource_name"], compute.InstanceView)
 		if err != nil {

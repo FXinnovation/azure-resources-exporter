@@ -55,7 +55,13 @@ func (c *VirtualMachinesCollector) CollectInstanceUp(ch chan<- prometheus.Metric
 			}
 		}
 
-		labels := ParseResourceLabels(*vm.ID)
+		labels, err := ParseResourceLabels(*vm.ID)
+
+		if err != nil {
+			log.Errorf("Skipping virtual machine: %s", err)
+			continue
+		}
+
 		labels["subscription_id"] = c.virtualMachines.GetSubscriptionID()
 
 		ch <- prometheus.MustNewConstMetric(

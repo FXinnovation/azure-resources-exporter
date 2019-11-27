@@ -2,6 +2,8 @@ package main
 
 import "strings"
 
+import "errors"
+
 var (
 	// resource component positions in a ResourceURL
 	resourceGroupPosition   = 4
@@ -10,14 +12,18 @@ var (
 )
 
 // ParseResourceLabels - Returns resource labels for a given resource ID.
-func ParseResourceLabels(resourceID string) map[string]string {
+func ParseResourceLabels(resourceID string) (map[string]string, error) {
 	labels := make(map[string]string)
 	resource := strings.Split(resourceID, "/")
+
+	if len(resource) < resourceNamePosition+1 {
+		return nil, errors.New("Error parsing resource ID, expected pattern is not matched for " + resourceID)
+	}
 
 	labels["resource_group"] = resource[resourceGroupPosition]
 	labels["resource_name"] = resource[resourceNamePosition]
 	if len(resource) > 13 {
 		labels["sub_resource_name"] = resource[subResourceNamePosition]
 	}
-	return labels
+	return labels, nil
 }
