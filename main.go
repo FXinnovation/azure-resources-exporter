@@ -88,7 +88,7 @@ func loadConfigContent(configData []byte) (Config, error) {
 	config = Config{}
 	var err error
 
-	err = yaml.Unmarshal([]byte(configData), &config)
+	err = yaml.Unmarshal(configData, &config)
 	if err != nil {
 		return config, err
 	}
