@@ -70,7 +70,7 @@ func loadConfig(configFile string) (Config, error) {
 	if fileExists(configFile) {
 		log.Infof("Loading config file %v", configFile)
 
-		// Load the config from the file
+		// Load config from file
 		configData, err := ioutil.ReadFile(configFile)
 		if err != nil {
 			return Config{}, err
