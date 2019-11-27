@@ -1,7 +1,6 @@
 azure-resources-exporter
-config.yml
-azure.env
-export-env.sh
+config/config.yml
+*.env
 
 # Binaries for programs and plugins
 *.exe

@@ -15,7 +15,7 @@ import (
 )
 
 var (
-	configFile     = kingpin.Flag("config.file", "Exporter configuration file.").Default("config.yml").String()
+	configFile     = kingpin.Flag("config.file", "Exporter configuration file.").Default("config/config.yml").String()
 	listenAddress  = kingpin.Flag("web.listen-address", "The address to listen on for HTTP requests.").Default(":9259").String()
 	metricsPath    = kingpin.Flag("web.telemetry-path", "Path under which to expose metrics.").Default("/metrics").String()
 	config         Config
@@ -38,7 +38,10 @@ func main() {
 	log.Info("Starting exporter", version.Info())
 	log.Info("Build context", version.BuildContext())
 
-	config = loadConfig(*configFile)
+	_, err := loadConfig(*configFile)
+	if err != nil {
+		log.Fatalf("Error loading config file: %v", err)
+	}
 
 	collector, err := NewVirtualMachinesCollector(os.Getenv("AZURE_SUBSCRIPTION_ID"))
 
@@ -63,27 +66,35 @@ func main() {
 	log.Fatal(http.ListenAndServe(*listenAddress, nil))
 }
 
-func loadConfig(configFile string) Config {
-	config := Config{}
-
+func loadConfig(configFile string) (Config, error) {
 	if fileExists(configFile) {
 		log.Infof("Loading config file %v", configFile)
 
 		// Load the config from the file
 		configData, err := ioutil.ReadFile(configFile)
 		if err != nil {
-			log.Fatalf("Error: %v", err)
+			return Config{}, err
 		}
 
-		errYAML := yaml.Unmarshal([]byte(configData), &config)
-		if errYAML != nil {
-			log.Fatalf("Error: %v", errYAML)
-		}
-	} else {
-		log.Infof("Config file %v does not exist, using default values", configFile)
+		return loadConfigContent(configData)
 	}
 
-	return config
+	log.Infof("Config file %v does not exist, using default values", configFile)
+	return Config{}, nil
+
+}
+
+func loadConfigContent(configData []byte) (Config, error) {
+	config = Config{}
+	var err error
+
+	err = yaml.Unmarshal([]byte(configData), &config)
+	if err != nil {
+		return config, err
+	}
+
+	log.Info("Config loaded")
+	return config, nil
 }
 
 func fileExists(filename string) bool {
