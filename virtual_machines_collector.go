@@ -6,6 +6,9 @@ import (
 	"github.com/prometheus/common/log"
 )
 
+// VirtualMachineUpState is the state of a Virtual Machine that is UP
+const VirtualMachineUpState = "PowerState/running"
+
 // VirtualMachinesCollector collect Virtual Machines metrics
 type VirtualMachinesCollector struct {
 	virtualMachines VirtualMachines
@@ -49,7 +52,7 @@ func (c *VirtualMachinesCollector) CollectInstanceUp(ch chan<- prometheus.Metric
 	for _, vm := range *vmList {
 		up := 0.0
 		for _, status := range *vm.VirtualMachineProperties.InstanceView.Statuses {
-			if *status.Code == "PowerState/running" {
+			if *status.Code == VirtualMachineUpState {
 				up = 1
 				break
 			}
