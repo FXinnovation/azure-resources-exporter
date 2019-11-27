@@ -12,6 +12,7 @@ require (
 	github.com/alecthomas/units v0.0.0-20190924025748-f65c72e2690d // indirect
 	github.com/cespare/xxhash/v2 v2.1.1 // indirect
 	github.com/golang/groupcache v0.0.0-20191027212112-611e8accdfc9 // indirect
+	github.com/golang/protobuf v1.3.2
 	github.com/grpc-ecosystem/grpc-gateway v1.9.5 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.1 // indirect
@@ -19,6 +20,7 @@ require (
 	github.com/prometheus/client_golang v1.2.1
 	github.com/prometheus/common v0.7.0
 	github.com/prometheus/procfs v0.0.7 // indirect
+	github.com/stretchr/testify v1.4.0
 	go.opencensus.io v0.22.2 // indirect
 	golang.org/x/net v0.0.0-20191125084936-ffdde1057850 // indirect
 	golang.org/x/sys v0.0.0-20191120155948-bd437916bb0e // indirect
