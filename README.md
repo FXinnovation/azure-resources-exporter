@@ -62,6 +62,10 @@ Use -h flag to list available options.
 make test
 ```
 
+## Configuration
+
+No configuration is supported yet in `config/config.yml` (**WIP**)
+
 ## Docker image
 
 You can build a docker image using:
