@@ -15,16 +15,12 @@ type VirtualMachinesCollector struct {
 }
 
 // NewVirtualMachinesCollector returns the collector
-func NewVirtualMachinesCollector(subscriptionID string) (*VirtualMachinesCollector, error) {
-	virtualMachines, err := NewVirtualMachines(subscriptionID)
-
-	if err != nil {
-		return nil, err
-	}
+func NewVirtualMachinesCollector(session *AzureSession) *VirtualMachinesCollector {
+	virtualMachines := NewVirtualMachines(session)
 
 	return &VirtualMachinesCollector{
 		virtualMachines: virtualMachines,
-	}, nil
+	}
 }
 
 // Describe to satisfy the collector interface.

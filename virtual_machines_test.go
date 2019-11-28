@@ -6,7 +6,12 @@ import (
 
 func TestNewVirtualMachines_OK(t *testing.T) {
 	wantSubscriptionID := "subscriptionID"
-	virtualMachines, err := NewVirtualMachines(wantSubscriptionID)
+	session, err := NewAzureSession(wantSubscriptionID)
+	if err != nil {
+		t.Errorf("Error occured %s", err)
+	}
+
+	virtualMachines := NewVirtualMachines(session)
 
 	if err != nil {
 		t.Errorf("Error occured %s", err)
@@ -14,13 +19,5 @@ func TestNewVirtualMachines_OK(t *testing.T) {
 
 	if virtualMachines.GetSubscriptionID() != wantSubscriptionID {
 		t.Errorf("Unexpected SubscriptionID; got: %v, want: %v", virtualMachines.GetSubscriptionID(), wantSubscriptionID)
-	}
-}
-
-func TestNewVirtualMachines_MissingSubscriptionID(t *testing.T) {
-	_, err := NewVirtualMachines("")
-
-	if err == nil {
-		t.Errorf("Want an error, got none")
 	}
 }
