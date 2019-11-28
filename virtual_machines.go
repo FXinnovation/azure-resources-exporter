@@ -7,14 +7,12 @@ import (
 	"github.com/prometheus/common/log"
 )
 
-// ResourceType of the resource
-const ResourceType = "Microsoft.Compute/virtualMachines"
-
 // VirtualMachinesClient is the client implementation to VirtualMachines API
 type VirtualMachinesClient struct {
-	Session   *AzureSession
-	Client    *compute.VirtualMachinesClient
-	Resources Resources
+	Session      *AzureSession
+	Client       *compute.VirtualMachinesClient
+	Resources    Resources
+	ResourceType string
 }
 
 // VirtualMachines client interface
@@ -30,9 +28,10 @@ func NewVirtualMachines(session *AzureSession) VirtualMachines {
 	resources := NewResources(session)
 
 	return &VirtualMachinesClient{
-		Session:   session,
-		Client:    &virtualMachinesClient,
-		Resources: resources,
+		Session:      session,
+		Client:       &virtualMachinesClient,
+		Resources:    resources,
+		ResourceType: "Microsoft.Compute/virtualMachines",
 	}
 }
 
@@ -45,20 +44,19 @@ func (client *VirtualMachinesClient) GetSubscriptionID() string {
 func (client *VirtualMachinesClient) GetVirtualMachines() (*[]compute.VirtualMachine, error) {
 	var vmList []compute.VirtualMachine
 
-	ressources, err := client.Resources.GetResources(ResourceType)
+	ressources, err := client.Resources.GetResources(client.ResourceType)
 	if err != nil {
 		return nil, err
 	}
 
 	for _, ressource := range *ressources {
-
 		labels, err := ParseResourceLabels(*ressource.ID)
 		if err != nil {
 			log.Errorf("Skipping virtual machine: %s", err)
 			continue
 		}
 
-		vm, err := client.Client.Get(context.Background(), labels["resource_group"], labels["resource_name"], compute.InstanceView)
+		vm, err := client.Client.Get(context.Background(), labels["resource_group"], *ressource.Name, compute.InstanceView)
 		if err != nil {
 			return nil, err
 		}
