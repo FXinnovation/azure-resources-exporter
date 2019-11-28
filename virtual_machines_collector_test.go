@@ -27,18 +27,15 @@ func (mock *MockedVirtualMachines) GetSubscriptionID() string {
 }
 
 func TestNewVirtualMachinesCollector_OK(t *testing.T) {
-	_, err := NewVirtualMachinesCollector("subscriptionID")
-
+	wantSubscriptionID := "subscriptionID"
+	session, err := NewAzureSession(wantSubscriptionID)
 	if err != nil {
 		t.Errorf("Error occured %s", err)
 	}
-}
+	_ = NewVirtualMachinesCollector(session)
 
-func TestNewVirtualMachinesCollector_MissingSubscriptionID(t *testing.T) {
-	_, err := NewVirtualMachinesCollector("")
-
-	if err == nil {
-		t.Errorf("Want an error, got none")
+	if err != nil {
+		t.Errorf("Error occured %s", err)
 	}
 }
 

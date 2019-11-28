@@ -43,11 +43,12 @@ func main() {
 		log.Fatalf("Error loading config file: %v", err)
 	}
 
-	collector, err := NewVirtualMachinesCollector(os.Getenv("AZURE_SUBSCRIPTION_ID"))
-
+	session, err := NewAzureSession(os.Getenv("AZURE_SUBSCRIPTION_ID"))
 	if err != nil {
-		log.Fatalf("Can't create Virtual Machines Collector: %s", err)
+		log.Fatalf("Error creating Azure session: %v", err)
 	}
+
+	collector := NewVirtualMachinesCollector(session)
 
 	prometheus.MustRegister(collector)
 
