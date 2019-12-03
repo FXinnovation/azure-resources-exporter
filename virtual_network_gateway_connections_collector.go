@@ -6,27 +6,27 @@ import (
 	"github.com/prometheus/common/log"
 )
 
-// VirtualNetworkGatewayConnecitonsCollector collect VirtualNetworkGatewayConnecitons metrics
-type VirtualNetworkGatewayConnecitonsCollector struct {
+// VirtualNetworkGatewayConnectionsCollector collect VirtualNetworkGatewayConnections metrics
+type VirtualNetworkGatewayConnectionsCollector struct {
 	virtualNetworkGatewayConnections VirtualNetworkGatewayConnections
 }
 
 // NewVirtualNetworkGatewayConnectionsCollector returns the collector
-func NewVirtualNetworkGatewayConnectionsCollector(session *AzureSession) *VirtualNetworkGatewayConnecitonsCollector {
+func NewVirtualNetworkGatewayConnectionsCollector(session *AzureSession) *VirtualNetworkGatewayConnectionsCollector {
 	virtualNetworkGatewayConnections := NewVirtualNetworkGatewayConnections(session)
 
-	return &VirtualNetworkGatewayConnecitonsCollector{
+	return &VirtualNetworkGatewayConnectionsCollector{
 		virtualNetworkGatewayConnections: virtualNetworkGatewayConnections,
 	}
 }
 
 // Describe to satisfy the collector interface.
-func (c *VirtualNetworkGatewayConnecitonsCollector) Describe(ch chan<- *prometheus.Desc) {
+func (c *VirtualNetworkGatewayConnectionsCollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- prometheus.NewDesc("VirtualNetworkGatewayConnecitonsCollector", "dummy", nil, nil)
 }
 
 // Collect metrics from Virtual Machine API
-func (c *VirtualNetworkGatewayConnecitonsCollector) Collect(ch chan<- prometheus.Metric) {
+func (c *VirtualNetworkGatewayConnectionsCollector) Collect(ch chan<- prometheus.Metric) {
 
 	conList, err := c.virtualNetworkGatewayConnections.GetVirtualNetworkGatewayConnections()
 	if err != nil {
@@ -39,7 +39,7 @@ func (c *VirtualNetworkGatewayConnecitonsCollector) Collect(ch chan<- prometheus
 }
 
 // CollectConnectionUp converts VirtualNetworkGateway connections status as a metric
-func (c *VirtualNetworkGatewayConnecitonsCollector) CollectConnectionUp(ch chan<- prometheus.Metric, conList *[]network.VirtualNetworkGatewayConnection) {
+func (c *VirtualNetworkGatewayConnectionsCollector) CollectConnectionUp(ch chan<- prometheus.Metric, conList *[]network.VirtualNetworkGatewayConnection) {
 
 	for _, con := range *conList {
 		up := 0.0

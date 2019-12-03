@@ -41,7 +41,7 @@ func TestNewVirtualNetworkGatewayConnecitonsCollector_OK(t *testing.T) {
 
 func TestCollectVNGCon_Error(t *testing.T) {
 	virtualNetworkGatewayConnections := MockedVirtualNetworkGatewayConnections{}
-	collector := VirtualNetworkGatewayConnecitonsCollector{
+	collector := VirtualNetworkGatewayConnectionsCollector{
 		virtualNetworkGatewayConnections: &virtualNetworkGatewayConnections,
 	}
 	prometheus.MustRegister(&collector)
@@ -62,7 +62,7 @@ func TestCollectVNGCon_Error(t *testing.T) {
 
 func TestCollectVNGCon_Up(t *testing.T) {
 	virtualNetworkGatewayConnections := MockedVirtualNetworkGatewayConnections{}
-	collector := VirtualNetworkGatewayConnecitonsCollector{
+	collector := VirtualNetworkGatewayConnectionsCollector{
 		virtualNetworkGatewayConnections: &virtualNetworkGatewayConnections,
 	}
 
