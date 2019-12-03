@@ -24,27 +24,27 @@ type VirtualMachines interface {
 
 // NewVirtualMachines returns a new Virtual Machines client
 func NewVirtualMachines(session *AzureSession) VirtualMachines {
-	virtualMachinesClient := compute.NewVirtualMachinesClient(session.SubscriptionID)
-	virtualMachinesClient.Authorizer = session.Authorizer
+	client := compute.NewVirtualMachinesClient(session.SubscriptionID)
+	client.Authorizer = session.Authorizer
 	resources := NewResources(session)
 
 	return &VirtualMachinesClient{
 		Session:   session,
-		Client:    &virtualMachinesClient,
+		Client:    &client,
 		Resources: resources,
 	}
 }
 
 // GetSubscriptionID return the client's Subscription ID
-func (client *VirtualMachinesClient) GetSubscriptionID() string {
-	return client.Session.SubscriptionID
+func (vc *VirtualMachinesClient) GetSubscriptionID() string {
+	return vc.Session.SubscriptionID
 }
 
 // GetVirtualMachines fetch Virtual Machines with instance status
-func (client *VirtualMachinesClient) GetVirtualMachines() (*[]compute.VirtualMachine, error) {
+func (vc *VirtualMachinesClient) GetVirtualMachines() (*[]compute.VirtualMachine, error) {
 	var vmList []compute.VirtualMachine
 
-	ressources, err := client.Resources.GetResources(virtualMachinesResourceType)
+	ressources, err := vc.Resources.GetResources(virtualMachinesResourceType)
 	if err != nil {
 		return nil, err
 	}
@@ -56,7 +56,7 @@ func (client *VirtualMachinesClient) GetVirtualMachines() (*[]compute.VirtualMac
 			continue
 		}
 
-		vm, err := client.Client.Get(context.Background(), labels["resource_group"], *ressource.Name, compute.InstanceView)
+		vm, err := vc.Client.Get(context.Background(), labels["resource_group"], *ressource.Name, compute.InstanceView)
 		if err != nil {
 			return nil, err
 		}

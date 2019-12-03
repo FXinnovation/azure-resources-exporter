@@ -32,7 +32,6 @@ func (c *VirtualMachinesCollector) Describe(ch chan<- *prometheus.Desc) {
 func (c *VirtualMachinesCollector) Collect(ch chan<- prometheus.Metric) {
 
 	vmList, err := c.virtualMachines.GetVirtualMachines()
-
 	if err != nil {
 		log.Errorf("Failed to get virtual machines list: %v", err)
 		ch <- prometheus.NewInvalidMetric(azureErrorDesc, err)
@@ -55,7 +54,6 @@ func (c *VirtualMachinesCollector) CollectInstanceUp(ch chan<- prometheus.Metric
 		}
 
 		labels, err := ParseResourceLabels(*vm.ID)
-
 		if err != nil {
 			log.Errorf("Skipping virtual machine: %s", err)
 			continue

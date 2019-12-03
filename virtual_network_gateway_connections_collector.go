@@ -29,7 +29,6 @@ func (c *VirtualNetworkGatewayConnecitonsCollector) Describe(ch chan<- *promethe
 func (c *VirtualNetworkGatewayConnecitonsCollector) Collect(ch chan<- prometheus.Metric) {
 
 	conList, err := c.virtualNetworkGatewayConnections.GetVirtualNetworkGatewayConnections()
-
 	if err != nil {
 		log.Errorf("Failed to get virtual network gateway connections list: %v", err)
 		ch <- prometheus.NewInvalidMetric(azureErrorDesc, err)
@@ -49,7 +48,6 @@ func (c *VirtualNetworkGatewayConnecitonsCollector) CollectConnectionUp(ch chan<
 		}
 
 		labels, err := ParseResourceLabels(*con.ID)
-
 		if err != nil {
 			log.Errorf("Skipping VirtualNetworkGateway connection: %s", err)
 			continue
