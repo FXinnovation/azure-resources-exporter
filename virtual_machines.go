@@ -7,12 +7,13 @@ import (
 	"github.com/prometheus/common/log"
 )
 
+const virtualMachinesResourceType = "Microsoft.Compute/virtualMachines"
+
 // VirtualMachinesClient is the client implementation to VirtualMachines API
 type VirtualMachinesClient struct {
-	Session      *AzureSession
-	Client       *compute.VirtualMachinesClient
-	Resources    Resources
-	ResourceType string
+	Session   *AzureSession
+	Client    *compute.VirtualMachinesClient
+	Resources Resources
 }
 
 // VirtualMachines client interface
@@ -28,10 +29,9 @@ func NewVirtualMachines(session *AzureSession) VirtualMachines {
 	resources := NewResources(session)
 
 	return &VirtualMachinesClient{
-		Session:      session,
-		Client:       &virtualMachinesClient,
-		Resources:    resources,
-		ResourceType: "Microsoft.Compute/virtualMachines",
+		Session:   session,
+		Client:    &virtualMachinesClient,
+		Resources: resources,
 	}
 }
 
@@ -44,7 +44,7 @@ func (client *VirtualMachinesClient) GetSubscriptionID() string {
 func (client *VirtualMachinesClient) GetVirtualMachines() (*[]compute.VirtualMachine, error) {
 	var vmList []compute.VirtualMachine
 
-	ressources, err := client.Resources.GetResources(client.ResourceType)
+	ressources, err := client.Resources.GetResources(virtualMachinesResourceType)
 	if err != nil {
 		return nil, err
 	}

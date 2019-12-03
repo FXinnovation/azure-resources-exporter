@@ -7,12 +7,13 @@ import (
 	"github.com/prometheus/common/log"
 )
 
+const virtualNetworkGatewayConnectionsResourceType = "Microsoft.Network/connections"
+
 // VirtualNetworkGatewayConnectionsClient is the client implementation to VirtualNetworkGatewayConnections API
 type VirtualNetworkGatewayConnectionsClient struct {
-	Session      *AzureSession
-	Client       *network.VirtualNetworkGatewayConnectionsClient
-	Resources    Resources
-	ResourceType string
+	Session   *AzureSession
+	Client    *network.VirtualNetworkGatewayConnectionsClient
+	Resources Resources
 }
 
 // VirtualNetworkGatewayConnections client interface
@@ -29,10 +30,9 @@ func NewVirtualNetworkGatewayConnections(session *AzureSession) VirtualNetworkGa
 	resources := NewResources(session)
 
 	return &VirtualNetworkGatewayConnectionsClient{
-		Session:      session,
-		Client:       &client,
-		Resources:    resources,
-		ResourceType: "Microsoft.Network/connections",
+		Session:   session,
+		Client:    &client,
+		Resources: resources,
 	}
 }
 
@@ -45,7 +45,7 @@ func (client *VirtualNetworkGatewayConnectionsClient) GetSubscriptionID() string
 func (client *VirtualNetworkGatewayConnectionsClient) GetVirtualNetworkGatewayConnections() (*[]network.VirtualNetworkGatewayConnection, error) {
 	var connectionList []network.VirtualNetworkGatewayConnection
 
-	ressources, err := client.Resources.GetResources(client.ResourceType)
+	ressources, err := client.Resources.GetResources(virtualNetworkGatewayConnectionsResourceType)
 	if err != nil {
 		return nil, err
 	}
