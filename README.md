@@ -88,6 +88,7 @@ Metric | Description
 ------ | -----------
 virtual_machine_instance_up | Running status of the virtual machine instance
 virtual_network_gateway_connection_up | Connections status of the virtual network gateway
+app_service_plan_up | Status of the app service plan
 
 ## Contributing
 
