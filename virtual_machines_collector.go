@@ -25,7 +25,7 @@ func NewVirtualMachinesCollector(session *AzureSession) *VirtualMachinesCollecto
 
 // Describe to satisfy the collector interface.
 func (c *VirtualMachinesCollector) Describe(ch chan<- *prometheus.Desc) {
-	ch <- prometheus.NewDesc("dummy", "dummy", nil, nil)
+	ch <- prometheus.NewDesc("VirtualMachinesCollector", "dummy", nil, nil)
 }
 
 // Collect metrics from Virtual Machine API
