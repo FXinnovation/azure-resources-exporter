@@ -11,8 +11,8 @@ type VirtualNetworkGatewayConnecitonsCollector struct {
 	virtualNetworkGatewayConnections VirtualNetworkGatewayConnections
 }
 
-// NewVirtualNetworkGatewayConnecitonsCollector returns the collector
-func NewVirtualNetworkGatewayConnecitonsCollector(session *AzureSession) *VirtualNetworkGatewayConnecitonsCollector {
+// NewVirtualNetworkGatewayConnectionsCollector returns the collector
+func NewVirtualNetworkGatewayConnectionsCollector(session *AzureSession) *VirtualNetworkGatewayConnecitonsCollector {
 	virtualNetworkGatewayConnections := NewVirtualNetworkGatewayConnections(session)
 
 	return &VirtualNetworkGatewayConnecitonsCollector{
