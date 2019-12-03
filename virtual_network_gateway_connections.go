@@ -37,15 +37,15 @@ func NewVirtualNetworkGatewayConnections(session *AzureSession) VirtualNetworkGa
 }
 
 // GetSubscriptionID return the client's Subscription ID
-func (client *VirtualNetworkGatewayConnectionsClient) GetSubscriptionID() string {
-	return client.Session.SubscriptionID
+func (vc *VirtualNetworkGatewayConnectionsClient) GetSubscriptionID() string {
+	return vc.Session.SubscriptionID
 }
 
 // GetVirtualNetworkGatewayConnections fetch VirtualNetworkGatewayConnections with connection status
-func (client *VirtualNetworkGatewayConnectionsClient) GetVirtualNetworkGatewayConnections() (*[]network.VirtualNetworkGatewayConnection, error) {
+func (vc *VirtualNetworkGatewayConnectionsClient) GetVirtualNetworkGatewayConnections() (*[]network.VirtualNetworkGatewayConnection, error) {
 	var connectionList []network.VirtualNetworkGatewayConnection
 
-	ressources, err := client.Resources.GetResources(virtualNetworkGatewayConnectionsResourceType)
+	ressources, err := vc.Resources.GetResources(virtualNetworkGatewayConnectionsResourceType)
 	if err != nil {
 		return nil, err
 	}
@@ -57,7 +57,7 @@ func (client *VirtualNetworkGatewayConnectionsClient) GetVirtualNetworkGatewayCo
 			continue
 		}
 
-		connection, err := client.Client.Get(context.Background(), labels["resource_group"], *ressource.Name)
+		connection, err := vc.Client.Get(context.Background(), labels["resource_group"], *ressource.Name)
 		if err != nil {
 			return nil, err
 		}

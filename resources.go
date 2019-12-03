@@ -30,15 +30,15 @@ func NewResources(session *AzureSession) Resources {
 }
 
 // GetResources return resources by type and tags
-func (client *ResourcesClient) GetResources(resourceType string) (*[]resources.GenericResource, error) {
+func (rc *ResourcesClient) GetResources(resourceType string) (*[]resources.GenericResource, error) {
 	filter := fmt.Sprintf("resourceType eq '%s'", resourceType)
-	return client.list(filter)
+	return rc.list(filter)
 }
 
-func (client *ResourcesClient) list(filter string) (*[]resources.GenericResource, error) {
+func (rc *ResourcesClient) list(filter string) (*[]resources.GenericResource, error) {
 	var resourceList []resources.GenericResource
 
-	for it, err := client.Client.ListComplete(context.Background(), filter, "", nil); it.NotDone(); err = it.Next() {
+	for it, err := rc.Client.ListComplete(context.Background(), filter, "", nil); it.NotDone(); err = it.Next() {
 		if err != nil {
 			return nil, err
 		}
