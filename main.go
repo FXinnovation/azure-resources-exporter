@@ -48,9 +48,11 @@ func main() {
 		log.Fatalf("Error creating Azure session: %v", err)
 	}
 
-	collector := NewVirtualMachinesCollector(session)
+	virtualMachinesCollector := NewVirtualMachinesCollector(session)
+	virtualNetworkGatewayConnecitonsCollector := NewVirtualNetworkGatewayConnecitonsCollector(session)
 
-	prometheus.MustRegister(collector)
+	prometheus.MustRegister(virtualMachinesCollector)
+	prometheus.MustRegister(virtualNetworkGatewayConnecitonsCollector)
 
 	http.Handle(*metricsPath, promhttp.Handler())
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {

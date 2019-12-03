@@ -87,6 +87,7 @@ docker run -p 9259:9259 -v /path/on/host/config/config.yml:/opt/azure-resources-
 Metric | Description
 ------ | -----------
 virtual_machine_instance_up | Running status of the virtual machine instance
+virtual_network_gateway_connection_up | Connections status of the virtual network gateway
 
 ## Contributing
 
