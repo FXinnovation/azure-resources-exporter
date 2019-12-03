@@ -32,7 +32,7 @@ func TestNewVirtualNetworkGatewayConnecitonsCollector_OK(t *testing.T) {
 	if err != nil {
 		t.Errorf("Error occured %s", err)
 	}
-	_ = NewVirtualNetworkGatewayConnecitonsCollector(session)
+	_ = NewVirtualNetworkGatewayConnectionsCollector(session)
 
 	if err != nil {
 		t.Errorf("Error occured %s", err)

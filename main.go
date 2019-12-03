@@ -49,7 +49,7 @@ func main() {
 	}
 
 	virtualMachinesCollector := NewVirtualMachinesCollector(session)
-	virtualNetworkGatewayConnecitonsCollector := NewVirtualNetworkGatewayConnecitonsCollector(session)
+	virtualNetworkGatewayConnecitonsCollector := NewVirtualNetworkGatewayConnectionsCollector(session)
 
 	prometheus.MustRegister(virtualMachinesCollector)
 	prometheus.MustRegister(virtualNetworkGatewayConnecitonsCollector)
