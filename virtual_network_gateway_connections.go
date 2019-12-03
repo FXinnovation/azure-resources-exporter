@@ -53,7 +53,7 @@ func (client *VirtualNetworkGatewayConnectionsClient) GetVirtualNetworkGatewayCo
 	for _, ressource := range *ressources {
 		labels, err := ParseResourceLabels(*ressource.ID)
 		if err != nil {
-			log.Errorf("Skipping virtual machine: %s", err)
+			log.Errorf("Skipping virtual network gateway connection: %s", err)
 			continue
 		}
 
