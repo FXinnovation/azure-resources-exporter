@@ -20,6 +20,7 @@ require (
 	github.com/prometheus/client_golang v1.2.1
 	github.com/prometheus/common v0.7.0
 	github.com/prometheus/procfs v0.0.7 // indirect
+	github.com/satori/go.uuid v1.2.0 // indirect
 	github.com/stretchr/testify v1.4.0
 	go.opencensus.io v0.22.2 // indirect
 	golang.org/x/net v0.0.0-20191125084936-ffdde1057850 // indirect
