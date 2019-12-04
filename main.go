@@ -51,10 +51,12 @@ func main() {
 	virtualMachinesCollector := NewVirtualMachinesCollector(session)
 	virtualNetworkGatewayConnecitonsCollector := NewVirtualNetworkGatewayConnectionsCollector(session)
 	appServicePlansCollector := NewAppServicePlansCollector(session)
+	webAppsCollector := NewWebAppsCollector(session)
 
 	prometheus.MustRegister(virtualMachinesCollector)
 	prometheus.MustRegister(virtualNetworkGatewayConnecitonsCollector)
 	prometheus.MustRegister(appServicePlansCollector)
+	prometheus.MustRegister(webAppsCollector)
 
 	http.Handle(*metricsPath, promhttp.Handler())
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
