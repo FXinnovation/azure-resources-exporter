@@ -13,10 +13,6 @@ func TestNewSQLServers_OK(t *testing.T) {
 
 	sqlServers := NewSQLServers(session)
 
-	if err != nil {
-		t.Errorf("Error occured %s", err)
-	}
-
 	if sqlServers.GetSubscriptionID() != want {
 		t.Errorf("Unexpected SubscriptionID; got: %v, want: %v", sqlServers.GetSubscriptionID(), want)
 	}

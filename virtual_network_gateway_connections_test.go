@@ -13,10 +13,6 @@ func TestNewVirtualNetworkGatewayConnections_OK(t *testing.T) {
 
 	virtualNetworkGatewayConnections := NewVirtualNetworkGatewayConnections(session)
 
-	if err != nil {
-		t.Errorf("Error occured %s", err)
-	}
-
 	if virtualNetworkGatewayConnections.GetSubscriptionID() != want {
 		t.Errorf("Unexpected SubscriptionID; got: %v, want: %v", virtualNetworkGatewayConnections.GetSubscriptionID(), want)
 	}

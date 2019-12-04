@@ -27,16 +27,11 @@ func (mock *MockedSQLServers) GetSubscriptionID() string {
 }
 
 func TestNewSQLServersCollector_OK(t *testing.T) {
-	want := "subscriptionID"
-	session, err := NewAzureSession(want)
+	session, err := NewAzureSession("subscriptionID")
 	if err != nil {
 		t.Errorf("Error occured %s", err)
 	}
 	_ = NewSQLServersCollector(session)
-
-	if err != nil {
-		t.Errorf("Error occured %s", err)
-	}
 }
 
 func TestCollectServer_Error(t *testing.T) {
