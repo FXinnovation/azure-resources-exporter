@@ -27,16 +27,11 @@ func (mock *MockedWebApps) GetSubscriptionID() string {
 }
 
 func TestNewWebAppsCollector_OK(t *testing.T) {
-	want := "subscriptionID"
-	session, err := NewAzureSession(want)
+	session, err := NewAzureSession("subscriptionID")
 	if err != nil {
 		t.Errorf("Error occured %s", err)
 	}
 	_ = NewWebAppsCollector(session)
-
-	if err != nil {
-		t.Errorf("Error occured %s", err)
-	}
 }
 
 func TestCollectApp_Error(t *testing.T) {

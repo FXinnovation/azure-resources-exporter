@@ -13,10 +13,6 @@ func TestNewVirtualMachines_OK(t *testing.T) {
 
 	virtualMachines := NewVirtualMachines(session)
 
-	if err != nil {
-		t.Errorf("Error occured %s", err)
-	}
-
 	if virtualMachines.GetSubscriptionID() != want {
 		t.Errorf("Unexpected SubscriptionID; got: %v, want: %v", virtualMachines.GetSubscriptionID(), want)
 	}
