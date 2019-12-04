@@ -88,6 +88,7 @@ virtual_machine_instance_up | Running status of the virtual machine instance
 virtual_network_gateway_connection_up | Connections status of the virtual network gateway
 app_service_plan_up | Status of the app service plan
 web_app_up | Status of the web app
+sql_server_up | Status of the SQL server
 
 ## Contributing
 
