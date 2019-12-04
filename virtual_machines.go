@@ -44,19 +44,19 @@ func (vc *VirtualMachinesClient) GetSubscriptionID() string {
 func (vc *VirtualMachinesClient) GetVirtualMachines() (*[]compute.VirtualMachine, error) {
 	var vmList []compute.VirtualMachine
 
-	ressources, err := vc.Resources.GetResources(virtualMachinesResourceType)
+	resources, err := vc.Resources.GetResources(virtualMachinesResourceType)
 	if err != nil {
 		return nil, err
 	}
 
-	for _, ressource := range *ressources {
-		labels, err := ParseResourceLabels(*ressource.ID)
+	for _, resource := range *resources {
+		labels, err := ParseResourceLabels(*resource.ID)
 		if err != nil {
 			log.Errorf("Skipping virtual machine: %s", err)
 			continue
 		}
 
-		vm, err := vc.Client.Get(context.Background(), labels["resource_group"], *ressource.Name, compute.InstanceView)
+		vm, err := vc.Client.Get(context.Background(), labels["resource_group"], *resource.Name, compute.InstanceView)
 		if err != nil {
 			return nil, err
 		}

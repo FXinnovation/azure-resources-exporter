@@ -45,19 +45,19 @@ func (vc *VirtualNetworkGatewayConnectionsClient) GetSubscriptionID() string {
 func (vc *VirtualNetworkGatewayConnectionsClient) GetVirtualNetworkGatewayConnections() (*[]network.VirtualNetworkGatewayConnection, error) {
 	var connectionList []network.VirtualNetworkGatewayConnection
 
-	ressources, err := vc.Resources.GetResources(virtualNetworkGatewayConnectionsResourceType)
+	resources, err := vc.Resources.GetResources(virtualNetworkGatewayConnectionsResourceType)
 	if err != nil {
 		return nil, err
 	}
 
-	for _, ressource := range *ressources {
-		labels, err := ParseResourceLabels(*ressource.ID)
+	for _, resource := range *resources {
+		labels, err := ParseResourceLabels(*resource.ID)
 		if err != nil {
 			log.Errorf("Skipping virtual network gateway connection: %s", err)
 			continue
 		}
 
-		connection, err := vc.Client.Get(context.Background(), labels["resource_group"], *ressource.Name)
+		connection, err := vc.Client.Get(context.Background(), labels["resource_group"], *resource.Name)
 		if err != nil {
 			return nil, err
 		}
