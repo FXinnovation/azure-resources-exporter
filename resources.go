@@ -18,7 +18,7 @@ type Resources interface {
 	GetResources(resourceType string) (*[]resources.GenericResource, error)
 }
 
-// NewResources returns a new Ressources client
+// NewResources returns a new Resources client
 func NewResources(session *AzureSession) Resources {
 	client := resources.NewClient(session.SubscriptionID)
 	client.Authorizer = session.Authorizer

@@ -44,19 +44,19 @@ func (ac *AppServicePlansClient) GetSubscriptionID() string {
 func (ac *AppServicePlansClient) GetAppServicePlans() (*[]web.AppServicePlan, error) {
 	var planList []web.AppServicePlan
 
-	ressources, err := ac.Resources.GetResources(appServicePlansResourceType)
+	resources, err := ac.Resources.GetResources(appServicePlansResourceType)
 	if err != nil {
 		return nil, err
 	}
 
-	for _, ressource := range *ressources {
-		labels, err := ParseResourceLabels(*ressource.ID)
+	for _, resource := range *resources {
+		labels, err := ParseResourceLabels(*resource.ID)
 		if err != nil {
 			log.Errorf("Skipping app service plan: %s", err)
 			continue
 		}
 
-		plan, err := ac.Client.Get(context.Background(), labels["resource_group"], *ressource.Name)
+		plan, err := ac.Client.Get(context.Background(), labels["resource_group"], *resource.Name)
 		if err != nil {
 			return nil, err
 		}
