@@ -53,12 +53,14 @@ func main() {
 	appServicePlansCollector := NewAppServicePlansCollector(session)
 	webAppsCollector := NewWebAppsCollector(session)
 	sqlServersCollector := NewSQLServersCollector(session)
+	sqlDatabasesCollector := NewSQLDatabasesCollector(session)
 
 	prometheus.MustRegister(virtualMachinesCollector)
 	prometheus.MustRegister(virtualNetworkGatewayConnecitonsCollector)
 	prometheus.MustRegister(appServicePlansCollector)
 	prometheus.MustRegister(webAppsCollector)
 	prometheus.MustRegister(sqlServersCollector)
+	prometheus.MustRegister(sqlDatabasesCollector)
 
 	http.Handle(*metricsPath, promhttp.Handler())
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {

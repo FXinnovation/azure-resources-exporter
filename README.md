@@ -89,6 +89,7 @@ virtual_network_gateway_connection_up | Connections status of the virtual networ
 app_service_plan_up | Status of the app service plan
 web_app_up | Status of the web app
 sql_server_up | Status of the SQL server
+sql_database_up | Status of the SQL database
 
 ## Contributing
 

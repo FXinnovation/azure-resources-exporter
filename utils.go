@@ -22,7 +22,7 @@ func ParseResourceLabels(resourceID string) (map[string]string, error) {
 
 	labels["resource_group"] = resource[resourceGroupPosition]
 	labels["resource_name"] = resource[resourceNamePosition]
-	if len(resource) > 13 {
+	if len(resource) > subResourceNamePosition {
 		labels["sub_resource_name"] = resource[subResourceNamePosition]
 	}
 	return labels, nil
