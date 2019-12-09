@@ -39,15 +39,15 @@ func (c *ApplicationGatewaysCollector) Collect(ch chan<- prometheus.Metric) {
 }
 
 // CollectApplicationGatewayUp converts ApplicationGateway operational state as a metric
-func (c *ApplicationGatewaysCollector) CollectApplicationGatewayUp(ch chan<- prometheus.Metric, conList *[]network.ApplicationGateway) {
+func (c *ApplicationGatewaysCollector) CollectApplicationGatewayUp(ch chan<- prometheus.Metric, agList *[]network.ApplicationGateway) {
 
-	for _, con := range *conList {
+	for _, ag := range *agList {
 		up := 0.0
-		if con.ApplicationGatewayPropertiesFormat.OperationalState == network.Running {
+		if ag.ApplicationGatewayPropertiesFormat.OperationalState == network.Running {
 			up = 1
 		}
 
-		labels, err := ParseResourceLabels(*con.ID)
+		labels, err := ParseResourceLabels(*ag.ID)
 		if err != nil {
 			log.Errorf("Skipping Application Gateway: %s", err)
 			continue

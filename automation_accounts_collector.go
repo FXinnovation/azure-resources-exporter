@@ -39,15 +39,15 @@ func (c *AutomationAccountsCollector) Collect(ch chan<- prometheus.Metric) {
 }
 
 // CollectAutomationAccountUp converts AutomationAccount state as a metric
-func (c *AutomationAccountsCollector) CollectAutomationAccountUp(ch chan<- prometheus.Metric, conList *[]automation.Account) {
+func (c *AutomationAccountsCollector) CollectAutomationAccountUp(ch chan<- prometheus.Metric, aaList *[]automation.Account) {
 
-	for _, con := range *conList {
+	for _, aa := range *aaList {
 		up := 0.0
-		if con.AccountProperties.State == automation.Ok {
+		if aa.AccountProperties.State == automation.Ok {
 			up = 1
 		}
 
-		labels, err := ParseResourceLabels(*con.ID)
+		labels, err := ParseResourceLabels(*aa.ID)
 		if err != nil {
 			log.Errorf("Skipping Automation Account: %s", err)
 			continue

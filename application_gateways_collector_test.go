@@ -41,8 +41,8 @@ func TestCollectApplicationGateway_Error(t *testing.T) {
 	}
 	prometheus.MustRegister(&collector)
 
-	var conList []network.ApplicationGateway
-	applicationGateways.On("GetApplicationGateways").Return(&conList, errors.New("Unit test Error"))
+	var agList []network.ApplicationGateway
+	applicationGateways.On("GetApplicationGateways").Return(&agList, errors.New("Unit test Error"))
 	applicationGateways.On("GetSubscriptionID").Return("my_subscription")
 
 	req := httptest.NewRequest("GET", "/webhook", nil)

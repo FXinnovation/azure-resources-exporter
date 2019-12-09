@@ -41,8 +41,8 @@ func TestCollectAutomationAccount_Error(t *testing.T) {
 	}
 	prometheus.MustRegister(&collector)
 
-	var conList []automation.Account
-	automationAccounts.On("GetAutomationAccounts").Return(&conList, errors.New("Unit test Error"))
+	var aaList []automation.Account
+	automationAccounts.On("GetAutomationAccounts").Return(&aaList, errors.New("Unit test Error"))
 	automationAccounts.On("GetSubscriptionID").Return("my_subscription")
 
 	req := httptest.NewRequest("GET", "/webhook", nil)
@@ -61,17 +61,17 @@ func TestCollectAutomationAccount_Up(t *testing.T) {
 		automationAccounts: &automationAccounts,
 	}
 
-	var agList []automation.Account
+	var aaList []automation.Account
 	id := "/subscriptions/my_subscription/resourceGroups/my_rg/providers/Microsoft.Automation/automationAccounts/my_aa"
 
-	agList = append(agList, automation.Account{
+	aaList = append(aaList, automation.Account{
 		AccountProperties: &automation.AccountProperties{
 			State: automation.Ok,
 		},
 		ID: &id,
 	})
 
-	automationAccounts.On("GetAutomationAccounts").Return(&agList, nil)
+	automationAccounts.On("GetAutomationAccounts").Return(&aaList, nil)
 	automationAccounts.On("GetSubscriptionID").Return("my_subscription")
 
 	req := httptest.NewRequest("GET", "/webhook", nil)
