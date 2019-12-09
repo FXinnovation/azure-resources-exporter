@@ -56,6 +56,7 @@ func main() {
 	sqlDatabasesCollector := NewSQLDatabasesCollector(session)
 	applicationGatewaysCollector := NewApplicationGatewaysCollector(session)
 	automationAccountsCollector := NewAutomationAccountsCollector(session)
+	serviceFabricClustersCollector := NewServiceFabricClustersCollector(session)
 
 	prometheus.MustRegister(virtualMachinesCollector)
 	prometheus.MustRegister(virtualNetworkGatewayConnecitonsCollector)
@@ -65,6 +66,7 @@ func main() {
 	prometheus.MustRegister(sqlDatabasesCollector)
 	prometheus.MustRegister(applicationGatewaysCollector)
 	prometheus.MustRegister(automationAccountsCollector)
+	prometheus.MustRegister(serviceFabricClustersCollector)
 
 	http.Handle(*metricsPath, promhttp.Handler())
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
