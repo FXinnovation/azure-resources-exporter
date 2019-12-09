@@ -91,6 +91,7 @@ web_app_up | Status of the web app
 sql_server_up | Status of the SQL server
 sql_database_up | Status of the SQL database
 application_gateway_up | Operational state of the application gateway
+automation_account_up | State of the automation account
 
 ## Contributing
 
