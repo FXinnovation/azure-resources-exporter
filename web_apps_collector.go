@@ -50,7 +50,7 @@ func (c *WebAppsCollector) CollectAppUp(ch chan<- prometheus.Metric, appList *[]
 			up = 1
 		}
 
-		labels, err := ParseResourceLabels(*app.ID)
+		labels, err := ParseResourceID(*app.ID)
 		if err != nil {
 			log.Errorf("Skipping WebApp: %s", err)
 			continue

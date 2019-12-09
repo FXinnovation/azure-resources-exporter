@@ -47,7 +47,7 @@ func (c *ServiceFabricClustersCollector) CollectServiceFabricClusterUp(ch chan<-
 			up = 1
 		}
 
-		labels, err := ParseResourceLabels(*sfc.ID)
+		labels, err := ParseResourceID(*sfc.ID)
 		if err != nil {
 			log.Errorf("Skipping Service Fabric Cluster: %s", err)
 			continue

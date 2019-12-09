@@ -47,7 +47,7 @@ func (c *VirtualNetworkGatewayConnectionsCollector) CollectConnectionUp(ch chan<
 			up = 1
 		}
 
-		labels, err := ParseResourceLabels(*con.ID)
+		labels, err := ParseResourceID(*con.ID)
 		if err != nil {
 			log.Errorf("Skipping VirtualNetworkGateway connection: %s", err)
 			continue

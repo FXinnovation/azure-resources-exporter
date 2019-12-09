@@ -47,7 +47,7 @@ func (c *AutomationAccountsCollector) CollectAutomationAccountUp(ch chan<- prome
 			up = 1
 		}
 
-		labels, err := ParseResourceLabels(*aa.ID)
+		labels, err := ParseResourceID(*aa.ID)
 		if err != nil {
 			log.Errorf("Skipping Automation Account: %s", err)
 			continue

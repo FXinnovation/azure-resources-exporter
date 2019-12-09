@@ -47,7 +47,7 @@ func (c *AppServicePlansCollector) CollectPlanUp(ch chan<- prometheus.Metric, pl
 			up = 1
 		}
 
-		labels, err := ParseResourceLabels(*plan.ID)
+		labels, err := ParseResourceID(*plan.ID)
 		if err != nil {
 			log.Errorf("Skipping AppServicePlan: %s", err)
 			continue

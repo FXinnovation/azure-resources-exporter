@@ -53,7 +53,7 @@ func (c *VirtualMachinesCollector) CollectInstanceUp(ch chan<- prometheus.Metric
 			}
 		}
 
-		labels, err := ParseResourceLabels(*vm.ID)
+		labels, err := ParseResourceID(*vm.ID)
 		if err != nil {
 			log.Errorf("Skipping virtual machine: %s", err)
 			continue

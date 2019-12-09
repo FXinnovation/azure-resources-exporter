@@ -50,7 +50,7 @@ func (wc *WebAppsClient) GetWebApps() (*[]web.Site, error) {
 	}
 
 	for _, resource := range *resources {
-		labels, err := ParseResourceLabels(*resource.ID)
+		labels, err := ParseResourceID(*resource.ID)
 		if err != nil {
 			log.Errorf("Skipping web app: %s", err)
 			continue

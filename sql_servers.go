@@ -50,7 +50,7 @@ func (sc *SQLServersClient) GetSQLServers() (*[]sql.Server, error) {
 	}
 
 	for _, resource := range *resources {
-		labels, err := ParseResourceLabels(*resource.ID)
+		labels, err := ParseResourceID(*resource.ID)
 		if err != nil {
 			log.Errorf("Skipping SQL server: %s", err)
 			continue

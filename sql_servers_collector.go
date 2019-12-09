@@ -50,7 +50,7 @@ func (c *SQLServersCollector) CollectServerUp(ch chan<- prometheus.Metric, serve
 			up = 1
 		}
 
-		labels, err := ParseResourceLabels(*server.ID)
+		labels, err := ParseResourceID(*server.ID)
 		if err != nil {
 			log.Errorf("Skipping SQLServer: %s", err)
 			continue

@@ -47,7 +47,7 @@ func (c *SQLDatabasesCollector) CollectDatabaseUp(ch chan<- prometheus.Metric, d
 			up = 1
 		}
 
-		labels, err := ParseResourceLabels(*db.ID)
+		labels, err := ParseResourceID(*db.ID)
 		if err != nil {
 			log.Errorf("Skipping SQLDatabase: %s", err)
 			continue
