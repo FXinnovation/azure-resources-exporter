@@ -50,7 +50,7 @@ func (vc *VirtualMachinesClient) GetVirtualMachines() (*[]compute.VirtualMachine
 	}
 
 	for _, resource := range *resources {
-		labels, err := ParseResourceLabels(*resource.ID)
+		labels, err := ParseResourceID(*resource.ID)
 		if err != nil {
 			log.Errorf("Skipping virtual machine: %s", err)
 			continue

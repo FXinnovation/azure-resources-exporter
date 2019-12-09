@@ -47,7 +47,7 @@ func (c *ApplicationGatewaysCollector) CollectApplicationGatewayUp(ch chan<- pro
 			up = 1
 		}
 
-		labels, err := ParseResourceLabels(*ag.ID)
+		labels, err := ParseResourceID(*ag.ID)
 		if err != nil {
 			log.Errorf("Skipping Application Gateway: %s", err)
 			continue
