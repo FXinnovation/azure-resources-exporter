@@ -1,1 +1,11 @@
-# No config options are supported yet
+resource_tags:
+
+  - tag_selections:
+    - tag_name: "Monitoring"
+      tag_value: "enabled"
+
+  - tag_selections:
+    - tag_name: "Client"
+      tag_value: "Alice"
+    - tag_name: "Env"
+      tag_value: "Prod"

@@ -24,6 +24,18 @@ var (
 
 // Config of the exporter
 type Config struct {
+	ResourceTags []ResourceTag `yaml:"resource_tags"`
+}
+
+// ResourceTag selects resources with tag selections
+type ResourceTag struct {
+	TagSelections []TagSelection `yaml:"tag_selections"`
+}
+
+// TagSelection is a list of tag name/values
+type TagSelection struct {
+	TagName  string `yaml:"tag_name"`
+	TagValue string `yaml:"tag_value"`
 }
 
 func init() {
