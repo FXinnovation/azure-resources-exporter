@@ -93,6 +93,7 @@ sql_database_up | Status of the SQL database
 application_gateway_up | Operational state of the application gateway
 automation_account_up | State of the automation account
 service_fabric_cluster_up | State of the service fabric cluster
+event_grid_topic_up | Provisionning state of the event grid topic
 
 ## Contributing
 
