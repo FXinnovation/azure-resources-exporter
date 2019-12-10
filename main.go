@@ -58,6 +58,7 @@ func main() {
 	automationAccountsCollector := NewAutomationAccountsCollector(session)
 	serviceFabricClustersCollector := NewServiceFabricClustersCollector(session)
 	eventGridTopicsCollector := NewEventGridTopicsCollector(session)
+	trafficManagerProfilesCollector := NewTrafficManagerProfilesCollector(session)
 
 	prometheus.MustRegister(virtualMachinesCollector)
 	prometheus.MustRegister(virtualNetworkGatewayConnecitonsCollector)
@@ -69,6 +70,7 @@ func main() {
 	prometheus.MustRegister(automationAccountsCollector)
 	prometheus.MustRegister(serviceFabricClustersCollector)
 	prometheus.MustRegister(eventGridTopicsCollector)
+	prometheus.MustRegister(trafficManagerProfilesCollector)
 
 	http.Handle(*metricsPath, promhttp.Handler())
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
