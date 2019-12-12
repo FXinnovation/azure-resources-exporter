@@ -60,5 +60,7 @@ func (c *SQLDatabasesCollector) CollectDatabaseUp(ch chan<- prometheus.Metric, d
 			prometheus.GaugeValue,
 			up,
 		)
+
+		ExportAzureTagInfo(ch, db.Tags, db.Type, labels)
 	}
 }

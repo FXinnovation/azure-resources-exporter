@@ -63,12 +63,18 @@ func TestCollectVNGCon_Up(t *testing.T) {
 
 	var conList []network.VirtualNetworkGatewayConnection
 	id := "/subscriptions/my_subscription/resourceGroups/my_rg/providers/Microsoft.Network/connections/my_con"
+	tagValue := "Value"
+	resourceType := "Microsoft.Network/connections"
 
 	conList = append(conList, network.VirtualNetworkGatewayConnection{
 		VirtualNetworkGatewayConnectionPropertiesFormat: &network.VirtualNetworkGatewayConnectionPropertiesFormat{
 			ConnectionStatus: network.VirtualNetworkGatewayConnectionStatusConnected,
 		},
 		ID: &id,
+		Tags: map[string]*string{
+			"Key": &tagValue,
+		},
+		Type: &resourceType,
 	})
 
 	virtualNetworkGatewayConnections.On("GetVirtualNetworkGatewayConnections").Return(&conList, nil)
@@ -85,7 +91,10 @@ func TestCollectVNGCon_Up(t *testing.T) {
 		t.Errorf("Wrong status code: got %v, want %v", status, http.StatusOK)
 	}
 
-	want := `# HELP virtual_network_gateway_connection_up Connections status of the virtual network gateway
+	want := `# HELP azure_tag_info Tags of the Azure resource
+# TYPE azure_tag_info gauge
+azure_tag_info{resource_group="my_rg",resource_name="my_con",resource_type="Microsoft.Network/connections",subscription_id="my_subscription",tag_key="Value"} 1
+# HELP virtual_network_gateway_connection_up Connections status of the virtual network gateway
 # TYPE virtual_network_gateway_connection_up gauge
 virtual_network_gateway_connection_up{resource_group="my_rg",resource_name="my_con",subscription_id="my_subscription"} 1
 `

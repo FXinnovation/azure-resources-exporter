@@ -60,5 +60,7 @@ func (c *VirtualNetworkGatewayConnectionsCollector) CollectConnectionUp(ch chan<
 			prometheus.GaugeValue,
 			up,
 		)
+
+		ExportAzureTagInfo(ch, con.Tags, con.Type, labels)
 	}
 }

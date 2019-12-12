@@ -64,12 +64,18 @@ func TestCollectServer_Up(t *testing.T) {
 	var serverList []sql.Server
 	id := "/subscriptions/my_subscription/resourceGroups/my_rg/providers/Microsoft.Sql/servers/my_server"
 	state := "Ready"
+	tagValue := "Value"
+	resourceType := "Microsoft.Sql/servers"
 
 	serverList = append(serverList, sql.Server{
 		ServerProperties: &sql.ServerProperties{
 			State: &state,
 		},
 		ID: &id,
+		Tags: map[string]*string{
+			"Key": &tagValue,
+		},
+		Type: &resourceType,
 	})
 
 	sqlServers.On("GetSQLServers").Return(&serverList, nil)
@@ -86,7 +92,10 @@ func TestCollectServer_Up(t *testing.T) {
 		t.Errorf("Wrong status code: got %v, want %v", status, http.StatusOK)
 	}
 
-	want := `# HELP sql_server_up Status of the SQL server
+	want := `# HELP azure_tag_info Tags of the Azure resource
+# TYPE azure_tag_info gauge
+azure_tag_info{resource_group="my_rg",resource_name="my_server",resource_type="Microsoft.Sql/servers",subscription_id="my_subscription",tag_key="Value"} 1
+# HELP sql_server_up Status of the SQL server
 # TYPE sql_server_up gauge
 sql_server_up{resource_group="my_rg",resource_name="my_server",subscription_id="my_subscription"} 1
 `

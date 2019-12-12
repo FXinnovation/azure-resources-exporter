@@ -61,6 +61,8 @@ func (c *TrafficManagerProfilesCollector) CollectTrafficManagerProfileUp(ch chan
 			up,
 		)
 
+		ExportAzureTagInfo(ch, profile.Tags, profile.Type, labels)
+
 		for _, endpoint := range *profile.Endpoints {
 			endpointUp := 0.0
 			if endpoint.EndpointProperties.EndpointStatus == trafficmanager.EndpointStatusEnabled {
@@ -80,6 +82,8 @@ func (c *TrafficManagerProfilesCollector) CollectTrafficManagerProfileUp(ch chan
 				prometheus.GaugeValue,
 				endpointUp,
 			)
+
+			ExportAzureTagInfo(ch, profile.Tags, endpoint.Type, endpointLabels)
 		}
 	}
 }

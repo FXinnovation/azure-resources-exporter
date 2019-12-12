@@ -63,12 +63,18 @@ func TestCollectAutomationAccount_Up(t *testing.T) {
 
 	var aaList []automation.Account
 	id := "/subscriptions/my_subscription/resourceGroups/my_rg/providers/Microsoft.Automation/automationAccounts/my_aa"
+	tagValue := "Value"
+	resourceType := "Microsoft.Automation/automationAccounts"
 
 	aaList = append(aaList, automation.Account{
 		AccountProperties: &automation.AccountProperties{
 			State: automation.Ok,
 		},
 		ID: &id,
+		Tags: map[string]*string{
+			"Key": &tagValue,
+		},
+		Type: &resourceType,
 	})
 
 	automationAccounts.On("GetAutomationAccounts").Return(&aaList, nil)
@@ -88,6 +94,9 @@ func TestCollectAutomationAccount_Up(t *testing.T) {
 	want := `# HELP automation_account_up State of the automation account
 # TYPE automation_account_up gauge
 automation_account_up{resource_group="my_rg",resource_name="my_aa",subscription_id="my_subscription"} 1
+# HELP azure_tag_info Tags of the Azure resource
+# TYPE azure_tag_info gauge
+azure_tag_info{resource_group="my_rg",resource_name="my_aa",resource_type="Microsoft.Automation/automationAccounts",subscription_id="my_subscription",tag_key="Value"} 1
 `
 	if rr.Body.String() != want {
 		t.Errorf("Unexpected body: got %v, want %v", rr.Body.String(), want)

@@ -63,12 +63,18 @@ func TestCollectApplicationGateway_Up(t *testing.T) {
 
 	var agList []network.ApplicationGateway
 	id := "/subscriptions/my_subscription/resourceGroups/my_rg/providers/Microsoft.Network/applicationGateways/my_ag"
+	tagValue := "Value"
+	resourceType := "Microsoft.Network/applicationGateways"
 
 	agList = append(agList, network.ApplicationGateway{
 		ApplicationGatewayPropertiesFormat: &network.ApplicationGatewayPropertiesFormat{
 			OperationalState: network.Running,
 		},
 		ID: &id,
+		Tags: map[string]*string{
+			"Key": &tagValue,
+		},
+		Type: &resourceType,
 	})
 
 	applicationGateways.On("GetApplicationGateways").Return(&agList, nil)
@@ -88,6 +94,9 @@ func TestCollectApplicationGateway_Up(t *testing.T) {
 	want := `# HELP application_gateway_up Operational state of the application gateway
 # TYPE application_gateway_up gauge
 application_gateway_up{resource_group="my_rg",resource_name="my_ag",subscription_id="my_subscription"} 1
+# HELP azure_tag_info Tags of the Azure resource
+# TYPE azure_tag_info gauge
+azure_tag_info{resource_group="my_rg",resource_name="my_ag",resource_type="Microsoft.Network/applicationGateways",subscription_id="my_subscription",tag_key="Value"} 1
 `
 	if rr.Body.String() != want {
 		t.Errorf("Unexpected body: got %v, want %v", rr.Body.String(), want)

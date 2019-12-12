@@ -54,11 +54,12 @@ func (c *AppServicePlansCollector) CollectPlanUp(ch chan<- prometheus.Metric, pl
 		}
 
 		labels["subscription_id"] = c.appServicePlans.GetSubscriptionID()
-
 		ch <- prometheus.MustNewConstMetric(
 			prometheus.NewDesc("app_service_plan_up", "Status of the app service plan", nil, labels),
 			prometheus.GaugeValue,
 			up,
 		)
+
+		ExportAzureTagInfo(ch, plan.Tags, plan.Type, labels)
 	}
 }
