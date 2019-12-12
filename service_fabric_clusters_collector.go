@@ -60,5 +60,7 @@ func (c *ServiceFabricClustersCollector) CollectServiceFabricClusterUp(ch chan<-
 			prometheus.GaugeValue,
 			up,
 		)
+
+		ExportAzureTagInfo(ch, sfc.Tags, sfc.Type, labels)
 	}
 }

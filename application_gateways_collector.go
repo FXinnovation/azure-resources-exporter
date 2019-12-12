@@ -60,5 +60,7 @@ func (c *ApplicationGatewaysCollector) CollectApplicationGatewayUp(ch chan<- pro
 			prometheus.GaugeValue,
 			up,
 		)
+
+		ExportAzureTagInfo(ch, ag.Tags, ag.Type, labels)
 	}
 }

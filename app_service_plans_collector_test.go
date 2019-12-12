@@ -63,12 +63,18 @@ func TestCollectPlan_Up(t *testing.T) {
 
 	var planList []web.AppServicePlan
 	id := "/subscriptions/my_subscription/resourceGroups/my_rg/providers/Microsoft.Web/serverfarms/my_plan"
+	tagValue := "Value"
+	resourceType := "Microsoft.Web/serverfarms"
 
 	planList = append(planList, web.AppServicePlan{
 		AppServicePlanProperties: &web.AppServicePlanProperties{
 			Status: web.StatusOptionsReady,
 		},
 		ID: &id,
+		Tags: map[string]*string{
+			"Key": &tagValue,
+		},
+		Type: &resourceType,
 	})
 
 	appServicePlans.On("GetAppServicePlans").Return(&planList, nil)
@@ -88,6 +94,9 @@ func TestCollectPlan_Up(t *testing.T) {
 	want := `# HELP app_service_plan_up Status of the app service plan
 # TYPE app_service_plan_up gauge
 app_service_plan_up{resource_group="my_rg",resource_name="my_plan",subscription_id="my_subscription"} 1
+# HELP azure_tag_info Tags of the Azure resource
+# TYPE azure_tag_info gauge
+azure_tag_info{resource_group="my_rg",resource_name="my_plan",resource_type="Microsoft.Web/serverfarms",subscription_id="my_subscription",tag_key="Value"} 1
 `
 	if rr.Body.String() != want {
 		t.Errorf("Unexpected body: got %v, want %v", rr.Body.String(), want)

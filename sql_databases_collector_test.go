@@ -63,12 +63,18 @@ func TestCollectDatabase_Up(t *testing.T) {
 
 	var dbList []sql.Database
 	id := "/subscriptions/my_subscription/resourceGroups/my_rg/providers/Microsoft.Sql/servers/my_server/databases/my_db"
+	tagValue := "Value"
+	resourceType := "Microsoft.Sql/servers/databases"
 
 	dbList = append(dbList, sql.Database{
 		DatabaseProperties: &sql.DatabaseProperties{
 			Status: sql.DatabaseStatusOnline,
 		},
 		ID: &id,
+		Tags: map[string]*string{
+			"Key": &tagValue,
+		},
+		Type: &resourceType,
 	})
 
 	sqlDatabases.On("GetSQLDatabases").Return(&dbList, nil)
@@ -85,7 +91,10 @@ func TestCollectDatabase_Up(t *testing.T) {
 		t.Errorf("Wrong status code: got %v, want %v", status, http.StatusOK)
 	}
 
-	want := `# HELP sql_database_up Status of the SQL database
+	want := `# HELP azure_tag_info Tags of the Azure resource
+# TYPE azure_tag_info gauge
+azure_tag_info{resource_group="my_rg",resource_name="my_server",resource_type="Microsoft.Sql/servers/databases",sub_resource_name="my_db",subscription_id="my_subscription",tag_key="Value"} 1
+# HELP sql_database_up Status of the SQL database
 # TYPE sql_database_up gauge
 sql_database_up{resource_group="my_rg",resource_name="my_server",sub_resource_name="my_db",subscription_id="my_subscription"} 1
 `

@@ -63,12 +63,18 @@ func TestCollectServiceFabricCluster_Up(t *testing.T) {
 
 	var sfcList []servicefabric.Cluster
 	id := "/subscriptions/my_subscription/resourceGroups/my_rg/providers/Microsoft.ServiceFabric/clusters/my_sfc"
+	tagValue := "Value"
+	resourceType := "Microsoft.ServiceFabric/clusters"
 
 	sfcList = append(sfcList, servicefabric.Cluster{
 		ClusterProperties: &servicefabric.ClusterProperties{
 			ClusterState: servicefabric.Ready,
 		},
 		ID: &id,
+		Tags: map[string]*string{
+			"Key": &tagValue,
+		},
+		Type: &resourceType,
 	})
 
 	serviceFabricClusters.On("GetServiceFabricClusters").Return(&sfcList, nil)
@@ -85,7 +91,10 @@ func TestCollectServiceFabricCluster_Up(t *testing.T) {
 		t.Errorf("Wrong status code: got %v, want %v", status, http.StatusOK)
 	}
 
-	want := `# HELP service_fabric_cluster_up State of the service fabric cluster
+	want := `# HELP azure_tag_info Tags of the Azure resource
+# TYPE azure_tag_info gauge
+azure_tag_info{resource_group="my_rg",resource_name="my_sfc",resource_type="Microsoft.ServiceFabric/clusters",subscription_id="my_subscription",tag_key="Value"} 1
+# HELP service_fabric_cluster_up State of the service fabric cluster
 # TYPE service_fabric_cluster_up gauge
 service_fabric_cluster_up{resource_group="my_rg",resource_name="my_sfc",subscription_id="my_subscription"} 1
 `

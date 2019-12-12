@@ -60,5 +60,7 @@ func (c *AutomationAccountsCollector) CollectAutomationAccountUp(ch chan<- prome
 			prometheus.GaugeValue,
 			up,
 		)
+
+		ExportAzureTagInfo(ch, aa.Tags, aa.Type, labels)
 	}
 }

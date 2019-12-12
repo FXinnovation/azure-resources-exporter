@@ -64,6 +64,9 @@ func TestCollectTrafficManagerProfile_Up(t *testing.T) {
 	var profileList []trafficmanager.Profile
 	profileID := "/subscriptions/my_subscription/resourceGroups/my_rg/providers/Microsoft.Network/trafficManagerProfiles/my_profile"
 	endpointID := "/subscriptions/my_subscription/resourceGroups/my_rg/providers/Microsoft.Network/trafficManagerProfiles/my_profile/azureEndpoints/my_endpoint"
+	tagValue := "Value"
+	profileResourceType := "Microsoft.Network/trafficManagerProfiles"
+	endpointResourceType := "Microsoft.Network/trafficManagerProfiles/azureEndpoints"
 
 	profileList = append(profileList, trafficmanager.Profile{
 		ProfileProperties: &trafficmanager.ProfileProperties{
@@ -73,11 +76,16 @@ func TestCollectTrafficManagerProfile_Up(t *testing.T) {
 					EndpointProperties: &trafficmanager.EndpointProperties{
 						EndpointStatus: trafficmanager.EndpointStatusEnabled,
 					},
-					ID: &endpointID,
+					ID:   &endpointID,
+					Type: &endpointResourceType,
 				},
 			},
 		},
 		ID: &profileID,
+		Tags: map[string]*string{
+			"Key": &tagValue,
+		},
+		Type: &profileResourceType,
 	})
 
 	trafficManagerProfiles.On("GetTrafficManagerProfiles").Return(&profileList, nil)
@@ -94,7 +102,11 @@ func TestCollectTrafficManagerProfile_Up(t *testing.T) {
 		t.Errorf("Wrong status code: got %v, want %v", status, http.StatusOK)
 	}
 
-	want := `# HELP traffic_manager_profile_endpoint_up Status of the traffic manager profile endpoint
+	want := `# HELP azure_tag_info Tags of the Azure resource
+# TYPE azure_tag_info gauge
+azure_tag_info{resource_group="my_rg",resource_name="my_profile",resource_type="Microsoft.Network/trafficManagerProfiles",subscription_id="my_subscription",tag_key="Value"} 1
+azure_tag_info{resource_group="my_rg",resource_name="my_profile",resource_type="Microsoft.Network/trafficManagerProfiles/azureEndpoints",sub_resource_name="my_endpoint",subscription_id="my_subscription",tag_key="Value"} 1
+# HELP traffic_manager_profile_endpoint_up Status of the traffic manager profile endpoint
 # TYPE traffic_manager_profile_endpoint_up gauge
 traffic_manager_profile_endpoint_up{resource_group="my_rg",resource_name="my_profile",sub_resource_name="my_endpoint",subscription_id="my_subscription"} 1
 # HELP traffic_manager_profile_up Status of the traffic manager profile

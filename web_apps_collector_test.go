@@ -64,12 +64,18 @@ func TestCollectApp_Up(t *testing.T) {
 	var appList []web.Site
 	id := "/subscriptions/my_subscription/resourceGroups/my_rg/providers/Microsoft.Web/site/my_app"
 	state := "Running"
+	tagValue := "Value"
+	resourceType := "Microsoft.Web/site"
 
 	appList = append(appList, web.Site{
 		SiteProperties: &web.SiteProperties{
 			State: &state,
 		},
 		ID: &id,
+		Tags: map[string]*string{
+			"Key": &tagValue,
+		},
+		Type: &resourceType,
 	})
 
 	webApps.On("GetWebApps").Return(&appList, nil)
@@ -86,7 +92,10 @@ func TestCollectApp_Up(t *testing.T) {
 		t.Errorf("Wrong status code: got %v, want %v", status, http.StatusOK)
 	}
 
-	want := `# HELP web_app_up Status of the web app
+	want := `# HELP azure_tag_info Tags of the Azure resource
+# TYPE azure_tag_info gauge
+azure_tag_info{resource_group="my_rg",resource_name="my_app",resource_type="Microsoft.Web/site",subscription_id="my_subscription",tag_key="Value"} 1
+# HELP web_app_up Status of the web app
 # TYPE web_app_up gauge
 web_app_up{resource_group="my_rg",resource_name="my_app",subscription_id="my_subscription"} 1
 `
