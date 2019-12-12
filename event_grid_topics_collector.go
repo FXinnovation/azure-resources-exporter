@@ -60,5 +60,7 @@ func (c *EventGridTopicsCollector) CollectEventGridTopicUp(ch chan<- prometheus.
 			prometheus.GaugeValue,
 			up,
 		)
+
+		ExportAzureTagInfo(ch, egt.Tags, egt.Type, labels)
 	}
 }

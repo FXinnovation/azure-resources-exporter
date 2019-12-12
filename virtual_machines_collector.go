@@ -66,5 +66,7 @@ func (c *VirtualMachinesCollector) CollectInstanceUp(ch chan<- prometheus.Metric
 			prometheus.GaugeValue,
 			up,
 		)
+
+		ExportAzureTagInfo(ch, vm.Tags, vm.Type, labels)
 	}
 }

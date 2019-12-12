@@ -63,5 +63,7 @@ func (c *SQLServersCollector) CollectServerUp(ch chan<- prometheus.Metric, serve
 			prometheus.GaugeValue,
 			up,
 		)
+
+		ExportAzureTagInfo(ch, server.Tags, server.Type, labels)
 	}
 }

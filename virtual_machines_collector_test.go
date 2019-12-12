@@ -63,6 +63,9 @@ func TestCollect_No_Status(t *testing.T) {
 
 	var vmList []compute.VirtualMachine
 	id := "/subscriptions/my_subscription/resourceGroups/my_rg/providers/Microsoft.Compute/virtualMachines/my_vm"
+	tagValue := "Value"
+	resourceType := "Microsoft.Compute/virtualMachines"
+
 	vmList = append(vmList, compute.VirtualMachine{
 		VirtualMachineProperties: &compute.VirtualMachineProperties{
 			InstanceView: &compute.VirtualMachineInstanceView{
@@ -70,6 +73,10 @@ func TestCollect_No_Status(t *testing.T) {
 			},
 		},
 		ID: &id,
+		Tags: map[string]*string{
+			"Key": &tagValue,
+		},
+		Type: &resourceType,
 	})
 
 	virtualMachines.On("GetVirtualMachines").Return(&vmList, nil)
@@ -86,7 +93,10 @@ func TestCollect_No_Status(t *testing.T) {
 		t.Errorf("Wrong status code: got %v, want %v", status, http.StatusOK)
 	}
 
-	want := `# HELP virtual_machine_instance_up Running status of the virtual machine instance
+	want := `# HELP azure_tag_info Tags of the Azure resource
+# TYPE azure_tag_info gauge
+azure_tag_info{resource_group="my_rg",resource_name="my_vm",resource_type="Microsoft.Compute/virtualMachines",subscription_id="my_subscription",tag_key="Value"} 1
+# HELP virtual_machine_instance_up Running status of the virtual machine instance
 # TYPE virtual_machine_instance_up gauge
 virtual_machine_instance_up{resource_group="my_rg",resource_name="my_vm",subscription_id="my_subscription"} 0
 `
@@ -105,6 +115,9 @@ func TestCollect_Up(t *testing.T) {
 	id := "/subscriptions/my_subscription/resourceGroups/my_rg/providers/Microsoft.Compute/virtualMachines/my_vm"
 	runningStatus := VirtualMachineUpState
 	otherStatus := "other"
+	tagValue := "Value"
+	resourceType := "Microsoft.Compute/virtualMachines"
+
 	vmList = append(vmList, compute.VirtualMachine{
 		VirtualMachineProperties: &compute.VirtualMachineProperties{
 			InstanceView: &compute.VirtualMachineInstanceView{
@@ -119,6 +132,10 @@ func TestCollect_Up(t *testing.T) {
 			},
 		},
 		ID: &id,
+		Tags: map[string]*string{
+			"Key": &tagValue,
+		},
+		Type: &resourceType,
 	})
 
 	virtualMachines.On("GetVirtualMachines").Return(&vmList, nil)
@@ -135,7 +152,10 @@ func TestCollect_Up(t *testing.T) {
 		t.Errorf("Wrong status code: got %v, want %v", status, http.StatusOK)
 	}
 
-	want := `# HELP virtual_machine_instance_up Running status of the virtual machine instance
+	want := `# HELP azure_tag_info Tags of the Azure resource
+# TYPE azure_tag_info gauge
+azure_tag_info{resource_group="my_rg",resource_name="my_vm",resource_type="Microsoft.Compute/virtualMachines",subscription_id="my_subscription",tag_key="Value"} 1
+# HELP virtual_machine_instance_up Running status of the virtual machine instance
 # TYPE virtual_machine_instance_up gauge
 virtual_machine_instance_up{resource_group="my_rg",resource_name="my_vm",subscription_id="my_subscription"} 1
 `

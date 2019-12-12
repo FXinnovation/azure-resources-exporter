@@ -63,12 +63,18 @@ func TestCollectEventGridTopic_Up(t *testing.T) {
 
 	var egtList []eventgrid.Topic
 	id := "/subscriptions/my_subscription/resourceGroups/my_rg/providers/Microsoft.EventGrid/topics/my_topic"
+	tagValue := "Value"
+	resourceType := "Microsoft.EventGrid/topics"
 
 	egtList = append(egtList, eventgrid.Topic{
 		TopicProperties: &eventgrid.TopicProperties{
 			ProvisioningState: eventgrid.TopicProvisioningStateSucceeded,
 		},
 		ID: &id,
+		Tags: map[string]*string{
+			"Key": &tagValue,
+		},
+		Type: &resourceType,
 	})
 
 	eventGridTopics.On("GetEventGridTopics").Return(&egtList, nil)
@@ -85,7 +91,10 @@ func TestCollectEventGridTopic_Up(t *testing.T) {
 		t.Errorf("Wrong status code: got %v, want %v", status, http.StatusOK)
 	}
 
-	want := `# HELP event_grid_topic_up Provisionning state of the event grid topic
+	want := `# HELP azure_tag_info Tags of the Azure resource
+# TYPE azure_tag_info gauge
+azure_tag_info{resource_group="my_rg",resource_name="my_topic",resource_type="Microsoft.EventGrid/topics",subscription_id="my_subscription",tag_key="Value"} 1
+# HELP event_grid_topic_up Provisionning state of the event grid topic
 # TYPE event_grid_topic_up gauge
 event_grid_topic_up{resource_group="my_rg",resource_name="my_topic",subscription_id="my_subscription"} 1
 `

@@ -63,5 +63,7 @@ func (c *WebAppsCollector) CollectAppUp(ch chan<- prometheus.Metric, appList *[]
 			prometheus.GaugeValue,
 			up,
 		)
+
+		ExportAzureTagInfo(ch, app.Tags, app.Type, labels)
 	}
 }
