@@ -29,10 +29,37 @@ func NewResources(session *AzureSession) Resources {
 	}
 }
 
-// GetResources return resources by type and tags
+// GetResources return resources by type and tags (if tags map is not empty).
+// A resource must match all tag parameters in order to be fetched
 func (rc *ResourcesClient) GetResources(resourceType string) (*[]resources.GenericResource, error) {
+	//TODO move this as an argument
+	var resourceTags map[string]string
+
 	filter := fmt.Sprintf("resourceType eq '%s'", resourceType)
-	return rc.list(filter)
+	resList, err := rc.list(filter)
+	if err != nil {
+		return nil, err
+	}
+
+	// Filtering by tag is done manually, as Azure does not support
+	// to filter both by resource type and by tag name/value
+	var filteredList []resources.GenericResource
+	for _, resource := range *resList {
+		include := true
+		if resourceTags != nil {
+			for name, value := range resourceTags {
+				if *resource.Tags[name] != value {
+					include = false
+					break
+				}
+			}
+		}
+		if include {
+			filteredList = append(filteredList, resource)
+		}
+	}
+
+	return &filteredList, nil
 }
 
 func (rc *ResourcesClient) list(filter string) (*[]resources.GenericResource, error) {
