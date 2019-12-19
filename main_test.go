@@ -34,23 +34,22 @@ func TestLoadConfigContent_Ok_Standard(t *testing.T) {
 	configFile := `
 resource_tags:
   - tag_selections:
-    - tag_name: "Client"
-      tag_value: "Alice"
-    - tag_name: "Env"
-      tag_value: "Prod"
+      Client: "Alice"
+      Env: "Prod"
+    resource_type_selections:
+      - "Microsoft.Web/serverfarms"
+      - "Microsoft.Web/sites"
 `
 	want := Config{
 		[]ResourceTag{
 			ResourceTag{
-				TagSelections: []TagSelection{
-					TagSelection{
-						TagName:  "Client",
-						TagValue: "Alice",
-					},
-					TagSelection{
-						TagName:  "Env",
-						TagValue: "Prod",
-					},
+				TagSelections: map[string]string{
+					"Client": "Alice",
+					"Env":    "Prod",
+				},
+				ResourceTypeSelections: []string{
+					"Microsoft.Web/serverfarms",
+					"Microsoft.Web/sites",
 				},
 			},
 		},

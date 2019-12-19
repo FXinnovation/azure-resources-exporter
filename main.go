@@ -29,13 +29,8 @@ type Config struct {
 
 // ResourceTag selects resources with tag selections
 type ResourceTag struct {
-	TagSelections []TagSelection `yaml:"tag_selections"`
-}
-
-// TagSelection is a list of tag name/values
-type TagSelection struct {
-	TagName  string `yaml:"tag_name"`
-	TagValue string `yaml:"tag_value"`
+	TagSelections          map[string]string `yaml:"tag_selections"`
+	ResourceTypeSelections []string          `yaml:"resource_type_selections"`
 }
 
 func init() {
