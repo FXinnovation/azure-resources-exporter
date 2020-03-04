@@ -59,6 +59,7 @@ func main() {
 	serviceFabricClustersCollector := NewServiceFabricClustersCollector(session)
 	eventGridTopicsCollector := NewEventGridTopicsCollector(session)
 	trafficManagerProfilesCollector := NewTrafficManagerProfilesCollector(session)
+	recoveryServicesBackupCollector := NewRecoveryServicesBackupCollector(session)
 
 	prometheus.MustRegister(virtualMachinesCollector)
 	prometheus.MustRegister(virtualNetworkGatewayConnecitonsCollector)
@@ -71,6 +72,7 @@ func main() {
 	prometheus.MustRegister(serviceFabricClustersCollector)
 	prometheus.MustRegister(eventGridTopicsCollector)
 	prometheus.MustRegister(trafficManagerProfilesCollector)
+	prometheus.MustRegister(recoveryServicesBackupCollector)
 
 	http.Handle(*metricsPath, promhttp.Handler())
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {

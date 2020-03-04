@@ -18,7 +18,7 @@ type RecoveryServicesBackupClient struct {
 
 // RecoveryServicesBackup client interface
 type RecoveryServicesBackup interface {
-	GetAzureIaaSVMProtectedItem() (*[]backup.AzureIaaSVMProtectedItem, error)
+	GetAzureIaaSComputeVMProtectedItem() (*[]backup.AzureIaaSComputeVMProtectedItem, error)
 	GetSubscriptionID() string
 }
 
@@ -40,9 +40,9 @@ func (rc *RecoveryServicesBackupClient) GetSubscriptionID() string {
 	return rc.Session.SubscriptionID
 }
 
-// GetAzureIaaSVMProtectedItem fetch AzureIaaSVMProtectedItems
-func (rc *RecoveryServicesBackupClient) GetAzureIaaSVMProtectedItem() (*[]backup.AzureIaaSVMProtectedItem, error) {
-	var piList []backup.AzureIaaSVMProtectedItem
+// GetAzureIaaSComputeVMProtectedItem fetch AzureIaaSComputeVMProtectedItem
+func (rc *RecoveryServicesBackupClient) GetAzureIaaSComputeVMProtectedItem() (*[]backup.AzureIaaSComputeVMProtectedItem, error) {
+	var piList []backup.AzureIaaSComputeVMProtectedItem
 
 	resources, err := rc.Resources.GetResources(recoveryServicesVaultResourceType)
 	if err != nil {
@@ -61,8 +61,11 @@ func (rc *RecoveryServicesBackupClient) GetAzureIaaSVMProtectedItem() (*[]backup
 				return nil, err
 			}
 			pir := it.Value()
-			pi, _ := pir.Properties.AsAzureIaaSVMProtectedItem()
-			piList = append(piList, *pi)
+			pi, _ := pir.Properties.AsAzureIaaSComputeVMProtectedItem()
+
+			if pi != nil {
+				piList = append(piList, *pi)
+			}
 		}
 	}
 
