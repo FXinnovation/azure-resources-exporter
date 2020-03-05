@@ -52,6 +52,13 @@ func (c *RecoveryServicesBackupCollector) CollectAzureIaaSComputeVMProtectedItem
 		}
 		labels["subscription_id"] = c.recoveryServicesBackup.GetSubscriptionID()
 
+		lastBackupTime := float64(vmProtectedItem.LastBackupTime.Unix())
+		ch <- prometheus.MustNewConstMetric(
+			prometheus.NewDesc("recovery_services_vault_backup_item_vm_last_backup_time_seconds", "Unix/epoch time of the last VM backup", nil, labels),
+			prometheus.GaugeValue,
+			lastBackupTime,
+		)
+
 		healthStatus := vmProtectedItem.HealthStatus
 		healthLabel := make(map[string]string)
 		for key, value := range labels {

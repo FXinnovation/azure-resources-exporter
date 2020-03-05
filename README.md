@@ -97,6 +97,9 @@ service_fabric_cluster_up | State of the service fabric cluster
 event_grid_topic_up | Provisionning state of the event grid topic
 traffic_manager_profile_up | Status of the traffic manager profile
 traffic_manager_profile_endpoint_up | Status of the traffic manager profile endpoint
+recovery_services_vault_backup_item_vm_health_status | Health status of the VM backup, as enum on `health_status` label
+recovery_services_vault_backup_item_vm_last_backup_status | Last backup status of the VM backup, as enum on `last_backup_status` label
+recovery_services_vault_backup_item_vm_last_backup_time_seconds | Unix/epoch time of the last VM backup
 
 ## Contributing
 

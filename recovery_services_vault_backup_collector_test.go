@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/Azure/azure-sdk-for-go/services/recoveryservices/mgmt/2019-05-13/backup"
+	"github.com/Azure/go-autorest/autorest/date"
 	"github.com/pkg/errors"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
@@ -65,10 +66,14 @@ func TestCollectAzureIaaSComputeVMProtectedItem_Up(t *testing.T) {
 	virtualMachineID := "/subscriptions/my_subscription/resourceGroups/my_rg/providers/Microsoft.Compute/virtualMachines/my_vm"
 	lastBackupStatus := string(backup.JobStatusCompleted)
 
+	lastBackupTime := date.Time{}
+	lastBackupTime.UnmarshalText([]byte("2012-11-24T00:00:00Z"))
+
 	piList = append(piList, backup.AzureIaaSComputeVMProtectedItem{
 		VirtualMachineID: &virtualMachineID,
 		HealthStatus:     backup.HealthStatusPassed,
 		LastBackupStatus: &lastBackupStatus,
+		LastBackupTime:   &lastBackupTime,
 	})
 
 	recoveryServicesBackup.On("GetAzureIaaSComputeVMProtectedItem").Return(&piList, nil)
@@ -100,6 +105,9 @@ recovery_services_vault_backup_item_vm_last_backup_status{last_backup_status="Co
 recovery_services_vault_backup_item_vm_last_backup_status{last_backup_status="Failed",resource_group="my_rg",resource_name="my_vm",subscription_id="my_subscription"} 0
 recovery_services_vault_backup_item_vm_last_backup_status{last_backup_status="InProgress",resource_group="my_rg",resource_name="my_vm",subscription_id="my_subscription"} 0
 recovery_services_vault_backup_item_vm_last_backup_status{last_backup_status="Invalid",resource_group="my_rg",resource_name="my_vm",subscription_id="my_subscription"} 0
+# HELP recovery_services_vault_backup_item_vm_last_backup_time_seconds Unix/epoch time of the last VM backup
+# TYPE recovery_services_vault_backup_item_vm_last_backup_time_seconds gauge
+recovery_services_vault_backup_item_vm_last_backup_time_seconds{resource_group="my_rg",resource_name="my_vm",subscription_id="my_subscription"} 1.3537152e+09
 `
 	if rr.Body.String() != want {
 		t.Errorf("Unexpected body: got %v, want %v", rr.Body.String(), want)
