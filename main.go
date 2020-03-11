@@ -48,29 +48,24 @@ func main() {
 		log.Fatalf("Error creating Azure session: %v", err)
 	}
 
-	virtualMachinesCollector := NewVirtualMachinesCollector(session)
-	virtualNetworkGatewayConnecitonsCollector := NewVirtualNetworkGatewayConnectionsCollector(session)
-	appServicePlansCollector := NewAppServicePlansCollector(session)
-	webAppsCollector := NewWebAppsCollector(session)
-	sqlServersCollector := NewSQLServersCollector(session)
-	sqlDatabasesCollector := NewSQLDatabasesCollector(session)
-	applicationGatewaysCollector := NewApplicationGatewaysCollector(session)
-	automationAccountsCollector := NewAutomationAccountsCollector(session)
-	serviceFabricClustersCollector := NewServiceFabricClustersCollector(session)
-	eventGridTopicsCollector := NewEventGridTopicsCollector(session)
-	trafficManagerProfilesCollector := NewTrafficManagerProfilesCollector(session)
+	var collectors []prometheus.Collector
 
-	prometheus.MustRegister(virtualMachinesCollector)
-	prometheus.MustRegister(virtualNetworkGatewayConnecitonsCollector)
-	prometheus.MustRegister(appServicePlansCollector)
-	prometheus.MustRegister(webAppsCollector)
-	prometheus.MustRegister(sqlServersCollector)
-	prometheus.MustRegister(sqlDatabasesCollector)
-	prometheus.MustRegister(applicationGatewaysCollector)
-	prometheus.MustRegister(automationAccountsCollector)
-	prometheus.MustRegister(serviceFabricClustersCollector)
-	prometheus.MustRegister(eventGridTopicsCollector)
-	prometheus.MustRegister(trafficManagerProfilesCollector)
+	collectors = append(collectors, NewVirtualMachinesCollector(session))
+	collectors = append(collectors, NewVirtualNetworkGatewayConnectionsCollector(session))
+	collectors = append(collectors, NewAppServicePlansCollector(session))
+	collectors = append(collectors, NewWebAppsCollector(session))
+	collectors = append(collectors, NewSQLServersCollector(session))
+	collectors = append(collectors, NewSQLDatabasesCollector(session))
+	collectors = append(collectors, NewApplicationGatewaysCollector(session))
+	collectors = append(collectors, NewAutomationAccountsCollector(session))
+	collectors = append(collectors, NewServiceFabricClustersCollector(session))
+	collectors = append(collectors, NewEventGridTopicsCollector(session))
+	collectors = append(collectors, NewTrafficManagerProfilesCollector(session))
+	collectors = append(collectors, NewRecoveryServicesBackupCollector(session))
+
+	for _, collector := range collectors {
+		prometheus.MustRegister(collector)
+	}
 
 	http.Handle(*metricsPath, promhttp.Handler())
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
